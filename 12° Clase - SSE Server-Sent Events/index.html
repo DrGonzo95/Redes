@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div id="sensor-data"></div>
+
+    <script>
+        const sensorDiv = document.getElementById('sensor-data');
+        const eventSource = new EventSource('/eventos');
+
+        // Manejar eventos específicos
+        eventSource.addEventListener('datos-sensor', (evento) => {
+            const datos = JSON.parse(evento.data);
+            sensorDiv.innerHTML = `
+        Temperatura: ${datos.temperatura.toFixed(2)}°C
+        Humedad: ${datos.humedad.toFixed(2)}%
+      `;
+        });
+
+        // Manejar errores
+        eventSource.onerror = (error) => {
+            console.error('Error SSE:', error);
+            eventSource.close();
+        };
+    </script>
+</body>
+
+</html>
